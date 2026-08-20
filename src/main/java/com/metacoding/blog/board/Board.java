@@ -33,6 +33,8 @@ public class Board {
     @CreationTimestamp
     private Timestamp createdAt;
 
+    // TODO (user)
+
     @Builder
     public Board(Integer id, String title, String content, Timestamp createdAt) {
         this.id = id;
