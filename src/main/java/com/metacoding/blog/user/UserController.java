@@ -16,14 +16,12 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/join")
-    public ResponseEntity<UserResponse> join(@Valid @RequestBody JoinRequest request) {
-        System.out.println("POST /join 요청 → username: " + request.username());
+    public ResponseEntity<?> join(@Valid @RequestBody JoinRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.join(request));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
-        System.out.println("POST /login 요청 → username: " + request.username());
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {
         return ResponseEntity.ok(userService.login(request));
     }
 }

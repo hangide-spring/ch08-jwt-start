@@ -14,17 +14,15 @@ public class JwtUtil {
     private static final long EXP = 1000L * 60 * 60; // 1시간
 
     public static String create(User user) {
-        // TODO 6: JWT를 발급하세요
-        //  JWT.create().withSubject("blog")
-        //     .withExpiresAt(만료시각)                  ← new Date(System.currentTimeMillis() + EXP)
-        //     .withClaim("id", ...).withClaim("username", ...)  ← payload: 누구나 읽을 수 있다, 민감정보 금지
-        //     .sign(Algorithm.HMAC512(SECRET))          ← 서명: 위조 판별용이지 암호화가 아니다
-        return null;
+        return JWT.create()
+                .withSubject("blog")
+                .withExpiresAt(new Date(System.currentTimeMillis() + EXP))
+                .withClaim("id", user.getId()) // payload는 누구나 읽을 수 있다 — 민감정보 금지
+                .withClaim("username", user.getUsername()) // payload는 누구나 읽을 수 있다 — 민감정보 금지
+                .sign(Algorithm.HMAC512(SECRET)); // 서명 — 위조 판별용이지 암호화가 아니다
     }
 
     public static DecodedJWT verify(String token) {
-        // TODO 7: 토큰을 검증하세요 — JWT.require(Algorithm.HMAC512(SECRET)).build().verify(token)
-        //         서명이 다르거나 만료됐으면 JWTVerificationException이 던져진다
-        return null;
+        return JWT.require(Algorithm.HMAC512(SECRET)).build().verify(token);
     }
 }

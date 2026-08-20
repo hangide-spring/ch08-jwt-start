@@ -20,48 +20,48 @@ import org.springframework.test.web.servlet.MockMvc;
 @WebMvcTest(BoardController.class)
 public class BoardControllerTest {
 
-    @Autowired
-    private MockMvc mvc;
+        @Autowired
+        private MockMvc mvc;
 
-    @MockitoBean // 컨트롤러가 의존하는 서비스를 가짜 객체로 대체한다
-    private BoardService boardService;
+        @MockitoBean // 컨트롤러가 의존하는 서비스를 가짜 객체로 대체한다
+        private BoardService boardService;
 
-    @Test
-    public void list_test() throws Exception {
-        // given — 가짜 서비스는 이제 엔티티가 아니라 응답 DTO(record)를 돌려준다
-        BoardResponse response = new BoardResponse(1, "제목1", "내용1", "익명", null);
-        given(boardService.findAll()).willReturn(List.of(response));
+        @Test
+        public void list_test() throws Exception {
+                // given — 가짜 서비스는 이제 엔티티가 아니라 응답 DTO(record)를 돌려준다
+                BoardResponse response = new BoardResponse(1, "제목1", "내용1", null);
+                given(boardService.findAll()).willReturn(List.of(response));
 
-        // when & then
-        mvc.perform(get("/boards"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].title").value("제목1"));
-    }
+                // when & then
+                mvc.perform(get("/boards"))
+                                .andExpect(status().isOk())
+                                .andExpect(jsonPath("$[0].title").value("제목1"));
+        }
 
-    @Test
-    public void save_test() throws Exception {
-        // given — @WebMvcTest에는 필터가 없으므로 userId는 null로 들어온다(가짜 서비스라 무관)
-        BoardResponse response = new BoardResponse(4, "새글제목", "새글내용", "ssar", null);
-        given(boardService.save(any(BoardRequest.class), any())).willReturn(response);
+        @Test
+        public void save_test() throws Exception {
+                // given — @WebMvcTest에는 필터가 없으므로 userId는 null로 들어온다(가짜 서비스라 무관)
+                BoardResponse response = new BoardResponse(4, "새글제목", "새글내용", null);
+                given(boardService.save(any(BoardRequest.class), any())).willReturn(response);
 
-        // when & then
-        mvc.perform(post("/boards")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("""
-                        {"title":"새글제목","content":"새글내용"}
-                        """))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(4));
-    }
+                // when & then
+                mvc.perform(post("/boards")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("""
+                                                {"title":"새글제목","content":"새글내용"}
+                                                """))
+                                .andExpect(status().isCreated())
+                                .andExpect(jsonPath("$.id").value(4));
+        }
 
-    @Test
-    public void save_valid_fail_test() throws Exception {
-        // when & then — 제목이 빈 값이면 @Valid가 400으로 거절한다 (서비스까지 가지도 않는다)
-        mvc.perform(post("/boards")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("""
-                        {"title":"","content":"내용"}
-                        """))
-                .andExpect(status().isBadRequest());
-    }
+        @Test
+        public void save_valid_fail_test() throws Exception {
+                // when & then — 제목이 빈 값이면 @Valid가 400으로 거절한다 (서비스까지 가지도 않는다)
+                mvc.perform(post("/boards")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("""
+                                                {"title":"","content":"내용"}
+                                                """))
+                                .andExpect(status().isBadRequest());
+        }
 }

@@ -2,27 +2,36 @@ package com.metacoding.blog.user;
 
 import java.sql.Timestamp;
 
-import lombok.Getter;
+import org.hibernate.annotations.CreationTimestamp;
 
-// TODO 1: 이 클래스를 user_tb 테이블과 매핑하세요 (Board 매핑 규칙 그대로)
-//  - @Entity, @Table(name = "user_tb")
-//  - @NoArgsConstructor (JPA 기본 생성자)
-//  - id: @Id + @GeneratedValue(strategy = GenerationType.IDENTITY)
-//  - username: @Column(unique = true)  ← 같은 아이디로 두 번 가입할 수 없다
-//  - createdAt: @CreationTimestamp
-//  - 아래 생성자에 @Builder
-//  ※ @Getter는 다른 코드가 값을 읽는 데 필요해서 미리 붙여 두었다
-//  ※ TODO 1을 채우기 전에는 서버·테스트가 뜨지 않는 것이 정상이다 (Not a managed type: User)
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
 @Getter
+@Table(name = "user_tb")
+@Entity
 public class User {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(unique = true) // 같은 아이디로 두 번 가입할 수 없다
     private String username;
     private String password; // BCrypt 해시가 저장된다 — 평문을 저장하지 않는다
 
+    @CreationTimestamp
     private Timestamp createdAt;
 
+    @Builder
     public User(Integer id, String username, String password, Timestamp createdAt) {
         this.id = id;
         this.username = username;

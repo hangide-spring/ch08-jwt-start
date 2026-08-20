@@ -12,7 +12,7 @@ public class FilterConfig {
     @Bean
     public FilterRegistrationBean<JwtAuthFilter> jwtAuthFilter() {
         FilterRegistrationBean<JwtAuthFilter> bean = new FilterRegistrationBean<>(new JwtAuthFilter());
-        bean.addUrlPatterns("/boards", "/boards/*"); // 게시판 URL만 필터를 거친다 — /join·/login은 공개
+        // TODO
         return bean;
     }
 }
