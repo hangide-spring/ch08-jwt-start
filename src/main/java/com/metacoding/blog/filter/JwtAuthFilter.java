@@ -32,7 +32,7 @@ public class JwtAuthFilter implements Filter {
             String token = header.replace("Bearer ", "");
             DecodedJWT decoded = JwtUtil.verify(token);
             Integer userId = decoded.getClaim("id").asInt();
-            // TODO
+            request.setAttribute("userId", userId); // 검증된 사용자 정보를 컨트롤러에 전달한다
             chain.doFilter(req, resp);
         } catch (JWTVerificationException e) {
             throw new RuntimeException("인증되지 않았어요");

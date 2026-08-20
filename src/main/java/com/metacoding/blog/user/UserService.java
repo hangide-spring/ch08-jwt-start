@@ -17,7 +17,15 @@ public class UserService {
 
     @Transactional
     public UserResponse join(JoinRequest request) {
-        // TODO
+        // userRepository.findByUsername(request.username()).ifPresent(u -> {
+        // throw new RuntimeException("이미 존재하는 아이디입니다 : " + request.username());
+        // });
+        // User user = User.builder()
+        // .username(request.username())
+        // .password(encoder.encode(request.password()))
+        // .build();
+        // userRepository.save(user);
+        // return UserResponse.from(user);
         return null;
     }
 
